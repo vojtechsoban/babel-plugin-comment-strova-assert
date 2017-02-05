@@ -1,0 +1,38 @@
+{
+  "name": "babel-plugin-transform-comment-to-assert",
+  "version": "3.0.0",
+  "description": "Replace commented expressions with assert statements",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src/. -d lib/.",
+    "test:spec": "babel-node src/index.spec.js",
+    "test:readme": "readme-assert --main './src' --require babel-register",
+    "lint": "eslint src",
+    "prepublish": "npm run build",
+    "example": "node example/example01.js",
+    "lint": "eslint src",
+    "test": "BABEL_ENV=test mocha --compilers js:babel-register --recursive"
+  },
+  "author": {
+    "name": "Vojtech Soban",
+    "email": "vojtech.soban@gmail.com",
+    "url": "https://github.com/vojtechsoban"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vojtechsoban/babel-plugin-comment-strova-assert.git"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-core": "^6.14.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-register": "^6.4.3",
+    "chai": "^3.5.0",
+    "eslint": "^3.4.0",
+    "mocha": "^3.2.0"
+  },
+  "files": [
+    "lib"
+  ]
+}
