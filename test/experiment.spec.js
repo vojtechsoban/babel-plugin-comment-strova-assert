@@ -1,21 +1,44 @@
-import {assert, expect, should} from 'chai'
+import chai, {assert, expect, should} from 'chai';
+import sinon from 'sinon';
+import {add} from '../example/calc';
+import sinonChai from 'sinon-chai';
+chai.use(sinonChai);
 
-import {foo} from './foo';
+describe('Tesing calc method "add"', function () {
 
-describe('Tesing method "foo"', () => {
-  it('should calculate 1 + 2', () => {
-    expect(foo(1, 2)).to.be.equal(3);
+  beforeEach(function () {
+    this.sinon = sinon.sandbox.create();
+    this.sinon.stub(console, 'error');
   });
 
-it('should throw error when both arguments missing', () => {
+  afterEach(function () {
+    this.sinon.restore();
+  });
+
+  it('should calculate 1 + 2', () => {
+    expect(add(1, 2)).to.be.equal(3);
+  });
+
+  it('should log error for both arguments', function () {
+    add();
+    expect(console.error).to.have.been.calledWith('Assertion error: arg1');
+    expect(console.error).to.have.been.calledWith('Assertion error: arg2');
+  });
+
+  it('should log error for the 2nd argument', function () {
+    add(1);
+    expect(console.error).to.have.been.calledWith('Assertion error: arg2');
+  });
+
+  it.skip('should throw error when both arguments missing', () => {
     expect(() => {
-      foo()
+      add()
     }).to.throw('Missing arguments');
   });
 
-  it('should throw error when the second argument is missing', () => {
+  it.skip('should throw error when the second argument is missing', () => {
     expect(() => {
-      foo(1)
+      add(1)
     }).to.throw('2nd argument is missing');
   });
 });

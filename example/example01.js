@@ -6,7 +6,7 @@ function replace (code) {
     return babel.transform(code, { babelrc: false, plugins: [plugin] }).code.trim();
 }
 
-const fileName = './testing.js';
+const fileName = './foomodule.js';
 
 fs.readFile(fileName, function(err, content) {
   if (err) throw err;

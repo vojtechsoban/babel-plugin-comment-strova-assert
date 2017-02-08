@@ -1,17 +1,15 @@
 {
-  "name": "babel-plugin-transform-comment-to-assert",
+  "name": "babel-plugin-comment-strova-assert",
   "version": "3.0.0",
   "description": "Replace commented expressions with assert statements",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src/. -d lib/.",
-    "test:spec": "babel-node src/index.spec.js",
-    "test:readme": "readme-assert --main './src' --require babel-register",
+    "build": "BABEL_ENV=dev babel src/. -d lib/.",
     "lint": "eslint src",
     "prepublish": "npm run build",
-    "example": "node example/example01.js",
-    "lint": "eslint src",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-register --recursive"
+    "example": "BABEL_ENV=test node example/example01.js",
+    "test": "BABEL_ENV=dev babel src/. -d node_modules/strova-assert/. &&  BABEL_ENV=test mocha --compilers js:babel-register --recursive",
+    "test:watch": "npm test -- --watch"
   },
   "author": {
     "name": "Vojtech Soban",
@@ -23,6 +21,12 @@
     "type": "git",
     "url": "https://github.com/vojtechsoban/babel-plugin-comment-strova-assert.git"
   },
+    "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "babel-preset-stage-0": "^6.22.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.4.0",
     "babel-core": "^6.14.0",
@@ -30,9 +34,8 @@
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",
     "eslint": "^3.4.0",
-    "mocha": "^3.2.0"
-  },
-  "files": [
-    "lib"
-  ]
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.8.0"
+  }
 }

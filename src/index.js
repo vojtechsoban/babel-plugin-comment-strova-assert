@@ -6,7 +6,7 @@ export default function visitor({types: t, template, transform}) {
 
   return {
     visitor: {
-      ['ExpressionStatement|VariableDeclaration'](path) {
+      ['ExpressionStatement|VariableDeclaration|ReturnStatement'](path) {
         const leadingComments = path.node.leadingComments;
         if (leadingComments && leadingComments.length) {
           for (let i = 0; i < leadingComments.length; i++) {
