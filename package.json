@@ -8,9 +8,11 @@
     "fake-install": "babel src -d node_modules/strova-assert",
     "lint": "eslint src",
     "prepublish": "npm run build",
-    "example": "npm run fake-install && BABEL_ENV=test node -r babel-register example/example01.js",
-    "test": "npm run fake-install && BABEL_ENV=test mocha --compilers js:babel-register --recursive",
-    "test:watch": "npm test -- --watch"
+    "example01": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example01.js",
+    "example02": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example02.js",
+    "example02:throw": "npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
+    "test:console": "npm run fake-install && BABEL_ENV=default mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
+    "test:throw": "npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
   },
   "author": {
     "name": "Vojtech Soban",
@@ -31,6 +33,7 @@
   "devDependencies": {
     "babel-cli": "^6.4.0",
     "babel-core": "^6.14.0",
+    "babel-eslint": "^7.1.1",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",

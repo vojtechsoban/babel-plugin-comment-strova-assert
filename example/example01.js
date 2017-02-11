@@ -9,7 +9,7 @@ import fs from 'fs';
  Environment variables: BABEL_ENV=test
  */
 function replace(code) {
-  return babel.transform(code, {babelrc: false, presets: [es2015], plugins: [strova_assert]}).code.trim();
+  return babel.transform(code, {babelrc: false, presets: [es2015], plugins: [[strova_assert, {action: 'throw'}]]}).code.trim();
 }
 
 const fileName = './example/foomodule.js';

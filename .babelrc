@@ -4,9 +4,29 @@
     "stage-0"
   ],
   "env": {
-    "test": {
+    "default": {
       "plugins": [
         "strova-assert"
+      ]
+    },
+    "info": {
+      "plugins": [
+        [
+          "strova-assert",
+          {
+            "action": "log_info"
+          }
+        ]
+      ]
+    },
+    "throw": {
+      "plugins": [
+        [
+          "strova-assert",
+          {
+            "action": "throw"
+          }
+        ]
       ]
     }
   }

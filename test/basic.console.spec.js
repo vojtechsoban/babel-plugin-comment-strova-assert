@@ -29,16 +29,4 @@ describe('Tesing calc method "add"', function () {
     add(1);
     expect(console.error).to.have.been.calledWith('Assertion error: arg2');
   });
-
-  it.skip('should throw error when both arguments missing', () => {
-    expect(() => {
-      add()
-    }).to.throw('Missing arguments');
-  });
-
-  it.skip('should throw error when the second argument is missing', () => {
-    expect(() => {
-      add(1)
-    }).to.throw('2nd argument is missing');
-  });
 });
