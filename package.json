@@ -5,10 +5,11 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "BABEL_ENV=dev babel src/. -d lib/.",
+    "fake-install": "babel src -d node_modules/strova-assert",
     "lint": "eslint src",
     "prepublish": "npm run build",
-    "example": "BABEL_ENV=test node example/example01.js",
-    "test": "BABEL_ENV=dev babel src/. -d node_modules/strova-assert/. &&  BABEL_ENV=test mocha --compilers js:babel-register --recursive",
+    "example": "npm run fake-install && BABEL_ENV=test node -r babel-register example/example01.js",
+    "test": "npm run fake-install && BABEL_ENV=test mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch"
   },
   "author": {
@@ -21,7 +22,7 @@
     "type": "git",
     "url": "https://github.com/vojtechsoban/babel-plugin-comment-strova-assert.git"
   },
-    "files": [
+  "files": [
     "lib"
   ],
   "dependencies": {

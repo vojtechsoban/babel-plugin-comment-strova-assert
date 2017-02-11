@@ -1,11 +1,13 @@
 {
+  "presets": [
+    "es2015",
+    "stage-0"
+  ],
   "env": {
-    "dev": {
-      "presets": [ "es2015", "stage-0" ]
-    },
     "test": {
-      "presets": [ "es2015", "stage-0" ],
-      "plugins": [ "strova-assert" ]
+      "plugins": [
+        "strova-assert"
+      ]
     }
   }
 }

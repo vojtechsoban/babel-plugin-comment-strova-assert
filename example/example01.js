@@ -1,14 +1,20 @@
 import * as babel from 'babel-core';
-import plugin from '../src/index';
+import es2015 from 'babel-preset-es2015';
+import strova_assert from '../src/index';
 import fs from 'fs';
 
-function replace (code) {
-    return babel.transform(code, { babelrc: false, plugins: [plugin] }).code.trim();
+/*
+ Idea/Webstorm Node.js Run/Debug configurations:
+ Node parameters: -r babel-register
+ Environment variables: BABEL_ENV=test
+ */
+function replace(code) {
+  return babel.transform(code, {babelrc: false, presets: [es2015], plugins: [strova_assert]}).code.trim();
 }
 
-const fileName = './foomodule.js';
+const fileName = './example/foomodule.js';
 
-fs.readFile(fileName, function(err, content) {
+fs.readFile(fileName, function (err, content) {
   if (err) throw err;
   const result = replace(content.toString());
   console.log('*** result ***');
