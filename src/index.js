@@ -1,3 +1,6 @@
+import {transformJsToAst} from './utils';
+import {parse} from './parser';
+
 const assertRegex = /^\s*assert\s+(.*)$/;
 const defaultErrorMessage = 'Assertion error';
 
@@ -49,15 +52,11 @@ export default function visitor({types: t, template, transform}) {
             const assertMatch = comment.match(assertRegex);
             if (assertMatch) {
               leadingComments.splice(i--, 1);
-              const assertExpression = assertMatch[1];
-              const transformedExpression = transform(`() => (${assertExpression})`).ast.program.body[0].expression.body;
+              const parsedAssertion = parse(assertMatch[1]);
+              const transformedExpression = transformJsToAst(transform, parsedAssertion.expression);
               const child = path.node.expression;
-              // if (t.isCallExpression(child)) {
-              //   path.insertBefore(assertTemplate({EXPRESSION: transformedExpression, MESSAGE: t.stringLiteral(`${defaultErrorMessage}:
-              // ${assertExpression}`)})); } else { path.replaceWith(assertTemplate({EXPRESSION: transformedExpression, MESSAGE:
-              // t.stringLiteral(`${defaultErrorMessage}: ${assertExpression}`)})); }
               path.insertBefore(
-                assertTemplate({EXPRESSION: transformedExpression, ACTION: buildActionFromOpts(t, assertExpression, state.opts.action)}));
+                assertTemplate({EXPRESSION: transformedExpression, ACTION: buildActionFromOpts(t, parsedAssertion.expression, state.opts.action)}));
             }
           }
         }
