@@ -11,7 +11,7 @@
     "example01": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example01.js",
     "example02": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example02.js",
     "example02:throw": "npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
-    "test": "BABEL_ENV=default mocha  'src' --compilers js:babel-register --recursive",
+    "test": "npm run fake-install && BABEL_ENV=default mocha  'src' --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
     "test:console": "npm run fake-install && BABEL_ENV=default mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
     "test:throw": "npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
