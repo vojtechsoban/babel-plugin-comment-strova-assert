@@ -1,13 +1,21 @@
 import * as t from './types';
 import lexer from './lexer';
 
+const getTokens = (input) => {
+  try {
+    return lexer(input);
+  } catch (e) {
+    throw new Error(`Can't process input='${input}': ${e.message}`);
+  }
+};
+
 export const parse = (input) => {
 
   const isKeyword = (value) => (t.KEYWORDS.indexOf(value) >= 0);
   
   const getModeForKeyword = (keyword) => {
     if (t.SIMPLE_KEYWORDS.includes(keyword)) {
-      return 'search_type_or_message';
+      return t.MODE_COLLECTING_TYPE_OR_MESSAGE;
     } else {
       throw new Error(`Unsupported keyword='${keyword}', don't know what to do next.`);
     }
@@ -19,7 +27,7 @@ export const parse = (input) => {
   let type = '';
   let message = '';
 
-  for (const chunk of lexer(input)) {
+  for (const chunk of getTokens(input)) {
 
     if (parserMode === t.MODE_COLLECTING_MESSAGE) {
       // append only when some character exists so that leading white spaces are ignored
@@ -59,13 +67,9 @@ export const parse = (input) => {
     message = null;
   }
   
-  // console.log(`last mode=${parserMode}, expression=${expression}, action=${action}, type=${type}, message=${message}`);
-  
   return {
     expression, action, type, message
   }
 };
 
 export default parse;
-
-// console.log(parse('variable : message'));
