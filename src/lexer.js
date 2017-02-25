@@ -4,11 +4,14 @@ import Scanner from './scanner';
 const WHITESPACES = /[ \t]/;
 const NUMBERS = /[0-9]/;
 const STRINGS = /[a-zA-Z0-9]/;
-const OPERATORS = /[+\-/*]/;
+const OPERATORS = /[+\-/*><]/;
 const BRACKETS = /[\[\]{}()]/;
 const SPECIAL_CHARACTERS = /[:?,]/;
 
-const getType = ({char, column}) => {
+const getType = (charObj) => {
+  
+  const char = charObj.value;
+  
   if (WHITESPACES.test(char)) {
     return t.TYPE_WHITESPACE;
   } else if (NUMBERS.test(char)) {
@@ -24,7 +27,7 @@ const getType = ({char, column}) => {
   } else if (SPECIAL_CHARACTERS.test(char)) {
     return t.TYPE_SPECIAL_CHARACTERS;
   } else {
-    throw new Error(`Unsupported char '${char}' ordinal=${char.charCodeAt(0)} at column=${column}`);
+    throw new Error(`Unsupported char '${char}' ordinal=${char.charCodeAt(0)} at column=${charObj.column}`);
   }
 };
 
