@@ -1,14 +1,6 @@
 import * as t from './types';
 import lexer from './lexer';
 
-const getTokens = (input) => {
-  try {
-    return lexer(input);
-  } catch (e) {
-    throw new Error(`Can't process input='${input}': ${e.message}`);
-  }
-};
-
 export const parse = (input) => {
 
   const isKeyword = (value) => (t.KEYWORDS.indexOf(value) >= 0);
@@ -27,25 +19,25 @@ export const parse = (input) => {
   let type = '';
   let message = '';
 
-  for (const chunk of getTokens(input)) {
+  for (const chunk of lexer(input)) {
 
     if (parserMode === t.MODE_COLLECTING_MESSAGE) {
       // append only when some character exists so that leading white spaces are ignored
       if (message || !message && chunk.type !== t.TYPE_WHITESPACE) {
         message += chunk.value;
       }
-    } else if (parserMode === t.MODE_COLLECTING_TYPE_OR_MESSAGE && chunk.type === t.TYPE_SPECIAL_CHARACTERS && chunk.value === ':') {
+    } else if (parserMode === t.MODE_COLLECTING_TYPE_OR_MESSAGE && chunk.type === t.TYPE_SYMBOLS && chunk.value === ':') {
       parserMode = t.MODE_COLLECTING_MESSAGE;
-    } else if (parserMode === t.MODE_COLLECTING_TYPE_OR_MESSAGE && chunk.type === t.TYPE_BRACKETS && chunk.value === '{') {
+    } else if (parserMode === t.MODE_COLLECTING_TYPE_OR_MESSAGE && chunk.type === t.TYPE_SYMBOLS && chunk.value === '{') {
       if (type) {
         throw new Error(`Unexpected '{' - type '${type}' is already found.`);
       }
       parserMode = t.MODE_COLLECTING_TYPE;
-    } else if (parserMode === t.MODE_COLLECTING_TYPE && chunk.type !== t.TYPE_BRACKETS && chunk.value !== '}') {
+    } else if (parserMode === t.MODE_COLLECTING_TYPE && !(chunk.type === t.TYPE_SYMBOLS && chunk.value === '}')) {
       if (chunk.type !== t.TYPE_WHITESPACE) {
         type += chunk.value;
       }
-    } else if (parserMode === t.MODE_COLLECTING_TYPE && chunk.type === t.TYPE_BRACKETS && chunk.value === '}') {
+    } else if (parserMode === t.MODE_COLLECTING_TYPE && chunk.type === t.TYPE_SYMBOLS && chunk.value === '}') {
       parserMode = t.MODE_COLLECTING_TYPE_OR_MESSAGE;
     } else if (parserMode === t.MODE_COLLECTING_EXPRESSION && chunk.type === t.TYPE_STRING && isKeyword(chunk.value)) {
       action = chunk.value;

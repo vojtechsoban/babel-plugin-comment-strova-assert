@@ -19,14 +19,17 @@ export default class Scanner {
     return this.testNext(arguments[0]);
   }
 
-  testNext(characters) {
+  nextCharacter() {
     if (this.position === this.length - 1) {
-      return false;
+      return null;
     }
-
     const nextCharacter = this.input.charAt(this.position + 1);
-    if (nextCharacter === '') return false;
-    return characters.indexOf(nextCharacter) > -1;
+    return nextCharacter !== '' ? nextCharacter : null;
+  }
+  
+  testNext(characters) {
+    const nextCharacter = this.nextCharacter();
+    return nextCharacter ? characters.indexOf(nextCharacter) > -1 : false;
   }
 
   getNext() {

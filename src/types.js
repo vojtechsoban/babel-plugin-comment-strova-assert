@@ -14,8 +14,5 @@ export const MODE_COLLECTING_TYPE_OR_MESSAGE = 'search_type_or_message';
 export const TYPE_WHITESPACE = 'whitespace';
 export const TYPE_NUMBER = 'number';
 export const TYPE_STRING = 'string';
-export const TYPE_OPERATORS = 'operator';
-export const TYPE_DECIMAL_POINT = 'decimal_point';
-export const TYPE_BRACKETS = 'brackets';
-export const TYPE_SPECIAL_CHARACTERS = 'special_character';
+export const TYPE_SYMBOLS = 'symbols';
 
