@@ -5,10 +5,10 @@ import * as t from '../types';
 
 chai.use(sinonChai);
 
-const whitespace = (value) => ({type: t.TYPE_WHITESPACE, value});
-const symbol = (value) => ({type: t.TYPE_SYMBOLS, value});
-const string = (value) => ({type: t.TYPE_STRING, value});
-const number = (value) => ({type: t.TYPE_NUMBER, value});
+const whitespace = (value, position = 0) => ({type: t.TYPE_WHITESPACE, value, position});
+const symbol = (value, position = 0) => ({type: t.TYPE_SYMBOLS, value, position});
+const string = (value, position = 0) => ({type: t.TYPE_STRING, value, position});
+const number = (value, position = 0) => ({type: t.TYPE_NUMBER, value, position});
 
 describe('Lexer should', () => {
   
@@ -25,40 +25,42 @@ describe('Lexer should', () => {
   });
   
   it('scan single whitespace', () => {
-    expect(lexer(' ')).to.be.deep.equal([{type: 'whitespace', value: ' '}]);
+    expect(lexer(' ')).to.be.deep.equal([whitespace(' ')]);
   });
   
   it('scan multiple whitespaces', () => {
-    expect(lexer(' \t')).to.be.deep.equal([{type: 'whitespace', value: ' \t'}]);
+    expect(lexer(' \t')).to.be.deep.equal([whitespace(' \t')]);
   });
   
   it('scan single string', () => {
-    expect(lexer('s')).to.be.deep.equal([{type: 'string', value: 's'}]);
+    expect(lexer('s')).to.be.deep.equal([string('s')]);
   });
   
   it('scan integer number', () => {
-    expect(lexer('123456')).to.be.deep.equal([{type: 'number', value: '123456'}]);
+    expect(lexer('123456')).to.be.deep.equal([number('123456')]);
   });
   
   it('scan floating number', () => {
-    expect(lexer('123.456')).to.be.deep.equal([{type: 'number', value: '123.456'}]);
+    expect(lexer('123.456')).to.be.deep.equal([number('123.456')]);
   });
   
   it('scan floating number starting with point', () => {
-    expect(lexer('.456')).to.be.deep.equal([{type: 'number', value: '.456'}]);
+    expect(lexer('.456')).to.be.deep.equal([number('.456')]);
   });
   
   it('scan floating number ending with point', () => {
-    expect(lexer('123.')).to.be.deep.equal([{type: 'number', value: '123.'}]);
+    expect(lexer('123.')).to.be.deep.equal([number('123.')]);
   });
   
   it('scan series of symbols', () => {
-    expect(lexer('{?+-/*}')).to.be.deep.equal([symbol('{'), symbol('?'), symbol('+'), symbol('-'), symbol('/'), symbol('*'), symbol('}')]);
+    expect(lexer('{?+-/*}')).to.be.deep.equal([symbol('{', 0), symbol('?', 1), symbol('+', 2), symbol('-', 3), symbol('/', 4),
+                                               symbol('*', 5), symbol('}', 6)]);
   });
   
   it('scan combination of tokens', () => {
     expect(lexer('ab + .123 = ${cd} - 456')).to.be.deep.equal(
-      [string('ab'), whitespace(' '), symbol('+'), whitespace(' '), number('.123'), whitespace(' '), symbol('='), whitespace(' '),
-       symbol('$'), symbol('{'), string('cd'), symbol('}'), whitespace(' '), symbol('-'), whitespace(' '), number('456')]);
+      [string('ab', 0), whitespace(' ', 2), symbol('+', 3), whitespace(' ', 4), number('.123', 5), whitespace(' ', 9),
+       symbol('=', 10), whitespace(' ', 11), symbol('$', 12), symbol('{', 13), string('cd', 14), symbol('}', 16), whitespace(' ', 17),
+       symbol('-', 18), whitespace(' ', 19), number('456', 20)]);
   });
 });

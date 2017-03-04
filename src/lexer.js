@@ -25,7 +25,7 @@ const lexer = (input) => {
   }
 
   const tokens = [];
-  let token = {type: null, value: ''};
+  let token = {type: null, value: '', position: 0};
   let currMode;
   let prevMode = null;
   const scanner = new Scanner(input);
@@ -43,7 +43,7 @@ const lexer = (input) => {
       if (token.value) { // if it's not a sybol on the first iteration
         tokens.push(token);
       }
-      token = {type: currMode, value: char.value};
+      token = {type: currMode, value: char.value, position: char.column};
     } else {
       token.type = currMode;
       token.value += char.value;
