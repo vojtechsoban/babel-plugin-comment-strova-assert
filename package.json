@@ -7,14 +7,14 @@
     "build": "BABEL_ENV=dev babel src --ignore '**/__test__' -d lib/.",
     "fake-install": "babel src --ignore '**/__test__' -d node_modules/strova-assert",
     "lint": "eslint src",
-    "prepublish": "npm run build",
-    "example01": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example01.js",
-    "example02": "npm run fake-install && BABEL_ENV=default node -r babel-register example/example02.js",
-    "example02:throw": "npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
-    "test": "npm run fake-install && BABEL_ENV=default mocha  'src' --compilers js:babel-register --recursive",
+    "prepublish": "touch example/* && npm run build",
+    "example01": "touch example/* && npm run fake-install && BABEL_ENV=default node -r babel-register example/example01.js",
+    "example02": "touch example/* && npm --resetCache run fake-install && BABEL_ENV=default node -r babel-register example/example02.js",
+    "example02:throw": "touch ./example/* && npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
+    "test": "touch example/* && npm run fake-install && BABEL_ENV=default mocha  'src' --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
     "test:console": "npm run fake-install && BABEL_ENV=default mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
-    "test:throw": "npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
+    "test:throw": "touch example/* && npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
   },
   "author": {
     "name": "Vojtech Soban",
