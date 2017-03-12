@@ -7,6 +7,10 @@ export const add = (arg1, arg2) => {
   // some comment 2
   // assert arg2
   const bar = 10;
+  
+  let name = 'World';
+  // assert name notBlank
+  // assert name notEmpty
 
   const result = arg1 + arg2;
   // assert result
