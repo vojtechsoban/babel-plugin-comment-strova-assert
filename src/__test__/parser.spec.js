@@ -93,6 +93,7 @@ describe('Tesing parser', () => {
     expect(message).to.not.exist;
     expect(nullable).to.be.false;
   });
+  
   it('the type without an action', () => {
     const {expression, action, type, message} = parse('name {?string} : Name is usually a string.');
     expect(expression).to.be.equal('name');
