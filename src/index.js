@@ -1,12 +1,28 @@
-import {transformJsToAst} from './utils';
+import {transformJsToAst, serialize} from './utils';
+import * as t from './types';
 import {parse} from './parser';
+export * from './assert';
 
 const assertRegex = /^\s*assert\s+(.*)$/;
 const defaultErrorMessage = 'Assertion error';
+const defaultAction = t.KEYWORD_NOT_NULL;
 
-const buildActionFromOpts = (t, assertExpression, action = 'log_error') => {
+const generate = (action, actionArguments, type, nullable = false) => {
   
-  const message = t.stringLiteral(`${defaultErrorMessage}: ${assertExpression}`);
+  if (!action) {
+    action = defaultAction;
+  }
+  
+  if (!actionArguments) {
+    actionArguments = [];
+  }
+  
+  return `(arg) => sa.assert(arg, '${action}', [${actionArguments.map(serialize)}], null, ${nullable})`;
+};
+
+const buildActionFromOpts = (t, strovaAst, action = 'log_error') => {
+  
+  const message = t.stringLiteral(`${defaultErrorMessage}: ${strovaAst.expression}`);
   
   const consoleEntry = (action, message) => (
     t.callExpression(
@@ -27,9 +43,9 @@ const buildActionFromOpts = (t, assertExpression, action = 'log_error') => {
     );
   } else if (action === 'log_error') {
     return consoleEntry('error', message);
-  } if (action === 'log_warn' || action === 'log_warning') {
+  } else if (action === 'log_warn' || action === 'log_warning') {
     return consoleEntry('warn', message);
-  } if (action === 'log_info') {
+  } else if (action === 'log_info') {
     return consoleEntry('info', message);
   } else if (action === 'log_debug') {
     return consoleEntry('debug', message);
@@ -40,11 +56,12 @@ const buildActionFromOpts = (t, assertExpression, action = 'log_error') => {
 
 export default function visitor({types: t, template, transform}) {
   
-  const assertTemplate = template('if (!(EXPRESSION)) ACTION');
+  const assertTemplate = template('if (!TEST(EXPRESSION)) ACTION');
   
   return {
     visitor: {
       ['ExpressionStatement|VariableDeclaration|ReturnStatement'](path, state) {
+        
         const leadingComments = path.node.leadingComments;
         if (leadingComments && leadingComments.length) {
           for (let i = 0; i < leadingComments.length; i++) {
@@ -54,13 +71,24 @@ export default function visitor({types: t, template, transform}) {
               leadingComments.splice(i--, 1);
               const parsedAssertion = parse(assertMatch[1]);
               const transformedExpression = transformJsToAst(transform, parsedAssertion.expression);
-              const child = path.node.expression;
+              const transformedTest = transformJsToAst(transform,
+                generate(parsedAssertion.action, parsedAssertion.actionArguments, parsedAssertion.type, parsedAssertion.nullable));
               path.insertBefore(
-                assertTemplate({EXPRESSION: transformedExpression, ACTION: buildActionFromOpts(t, parsedAssertion.expression, state.opts.action)}));
+                assertTemplate({
+                  EXPRESSION: transformedExpression,
+                  TEST: transformedTest,
+                  ACTION: buildActionFromOpts(t, parsedAssertion, state.opts.action)
+                }));
             }
           }
         }
       },
-    },
+
+      Program (path) {
+        const transformed = transform('import * as sa from \'strova-assert\';');
+        const transformedNode = transformed.ast.program.body[0];
+        path.unshiftContainer('body', transformedNode);
+      }
+    }
   };
 }
