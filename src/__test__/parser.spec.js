@@ -4,7 +4,7 @@ import {parse} from '../parser';
 
 chai.use(sinonChai);
 
-const assertParser = (input, expectedExpression, expectedAction, expectedActionArguments = [],
+const assertParser = (input, expectedExpression, expectedAction, expectedActionArguments = null,
                       expectedType = null, expectedMessage = null, expectedNullable = false) => {
   
   const {expression, action, actionArguments, type, message, nullable} = parse(input);
@@ -84,7 +84,24 @@ describe('Tesing parser', () => {
   it('variable within range -1, 1', () => {
     assertParser('variable {-1 < string < 1}', 'variable', 'range', [-1, '<', '<', 1], 'string');
   });
-  
+
+  it('variable within range +1, +10 inclusive', () => {
+    assertParser('variable {+1 <= string <= +10}', 'variable', 'range', [1, '<=', '<=', 10], 'string');
+  });
+
+  it('variable within range +1, +10 exclusive', () => {
+    assertParser('variable {+1 < string < +10}', 'variable', 'range', [1, '<', '<', 10], 'string');
+  });
+
+  it('variable greater or equal 10 - pre argument', () => {
+    assertParser('variable {10 <= string}', 'variable', 'range', [10, '<='], 'string');
+  });
+
+  it.skip('variable greater or equal 10 - natural way - post argument', () => {
+    // TODO support converting operators
+    assertParser('variable {string >= 10}', 'variable', 'range', [10, '<='], 'string');
+  });
+
   it('variable must not be empty but might be null', () => {
     const {expression, action, type, message, nullable} = parse('variable notEmpty');
     expect(expression).to.be.equal('variable');
@@ -95,13 +112,17 @@ describe('Tesing parser', () => {
   });
   
   it('the type without an action', () => {
-    const {expression, action, type, message} = parse('name {?string} : Name is usually a string.');
-    expect(expression).to.be.equal('name');
-    expect(action).to.not.exist;
-    expect(type).to.be.equal('string');
-    expect(message).to.be.equal('Name is usually a string.');
+    assertParser('name {?string} : Name is usually a string.', 'name', null, [], 'string', 'Name is usually a string.', true);
   });
-  
+
+  it.skip('the type with an action using 2 modifiers', () => {
+    assertParser('name {?$string} : Name is usually a string.', 'name', 'notEmpty', [], 'string', 'Name is usually a string.', true);
+  });
+
+  it.skip('the type with an action using 2 modifiers - flipped', () => {
+    assertParser('name {$?string} : Name is usually a string.', 'name', 'notEmpty', [], 'string', 'Name is usually a string.', true);
+  });
+
   it('the simpliest assertion without a message.', () => {
     const {expression, action, type, message} = parse('variable');
     expect(expression).to.be.equal('variable');
@@ -122,5 +143,7 @@ describe('Tesing parser', () => {
     // tested variable might be null but must not be empty when is not null
     assertParser('variable nullable notEmpty');
     assertParser('variable notEmpty nullable');
+    assertParser('variable notEmpty {?string}');
+    assertParser('variable nullable {$string}');
   });
 });

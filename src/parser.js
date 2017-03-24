@@ -87,9 +87,13 @@ export const parse = (input) => {
           case '?':
             nullable = true;
             break;
+          case '$':
+            // Just to avoid breaking examples
+            console.warn(`// TODO Unprocessed chunk "$"`);
+            break;
             // TODO other types #, $
           default:
-            throw new Error(`Unexpected modifier '${chunk.value}'`);
+            throw new Error(`Unexpected modifier "${chunk.value}" at position ${chunk.position}, type=${chunk.type}`);
         }
       } else if ((parserSubMode === 'expecting_operator' || parserSubMode === 'expecting_post_operator') && chunk.value === '<') {
         if (tokens[i + 1].value === '=') {

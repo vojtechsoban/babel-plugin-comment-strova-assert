@@ -1,6 +1,6 @@
 import chai, {assert, expect, should} from 'chai';
 import sinon from 'sinon';
-import {add} from '../example/calc';
+import {add} from '../example/foomodule';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 

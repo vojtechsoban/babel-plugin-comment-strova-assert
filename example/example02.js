@@ -1,6 +1,7 @@
-import {add, greeting} from './calc';
+import {add, greeting, buildFullName} from './foomodule';
 
 const expected = process.env.BABEL_ENV === 'throw';
+const valid = false;
 
 const wrapper = (func, expected = true) => {
   let result = null;
@@ -19,9 +20,15 @@ const wrapper = (func, expected = true) => {
   }
 };
 
-wrapper(() => (`result of add(1, 2): ${add(1, 2)}`), false);
+wrapper(() => (`result of add(1, 2): ${add(1, 2)}`), valid);
 wrapper(() => (`result of add(1): ${add(1)}`), expected);
 wrapper(() => (`result of add(): ${add()}`), expected);
-wrapper(() => (`result of greeting('a', 'b'): ${greeting('a', 'b')}`), false);
+wrapper(() => (`result of greeting('a', 'b'): ${greeting('a', 'b')}`), valid);
 wrapper(() => (`result of greeting('a'): ${greeting('a')}`), expected);
+wrapper(() => (`result of greeting(' ', ' '): ${greeting(' ', ' ')}`), expected);
+wrapper(() => (`result of greeting('a', ''): ${greeting('a', ' ')}`), expected);
 wrapper(() => (`result of greeting(): ${greeting()}`), expected);
+
+
+wrapper(() => (`result of buildFullName(): ${buildFullName()}`), expected);
+

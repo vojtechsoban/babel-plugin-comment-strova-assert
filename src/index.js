@@ -21,8 +21,8 @@ const generate = (action, actionArguments, type, nullable = false) => {
 };
 
 const buildActionFromOpts = (t, strovaAst, action = 'log_error') => {
-  
-  const message = t.stringLiteral(`${defaultErrorMessage}: ${strovaAst.expression}`);
+
+  const message = t.stringLiteral(`${strovaAst.message ? strovaAst.message : defaultErrorMessage}: ${strovaAst.expression}`);
   
   const consoleEntry = (action, message) => (
     t.callExpression(

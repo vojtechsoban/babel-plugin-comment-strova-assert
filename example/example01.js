@@ -9,7 +9,11 @@ import fs from 'fs';
  Environment variables: BABEL_ENV=test
  */
 const replace = (code) => {
-  return babel.transform(code, {babelrc: false, presets: [es2015], plugins: [[strova_assert, {action: 'throw'}]]}).code.trim();
+  return babel.transform(code, {
+    babelrc: false,
+    presets: [es2015],
+    plugins: [[strova_assert, {action: 'throw'}]]
+  }).code.trim();
 };
 
 const readFileCallback = fileName => (err, content) => {
@@ -22,6 +26,3 @@ const readFileCallback = fileName => (err, content) => {
 
 const foomoduleFileName = './example/foomodule.js';
 fs.readFile(foomoduleFileName, readFileCallback(foomoduleFileName));
-
-const calcFileName = './example/calc.js';
-fs.readFile(calcFileName, readFileCallback(calcFileName));
