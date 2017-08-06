@@ -8,10 +8,10 @@
     "fake-install": "babel src --ignore '**/__test__' -d node_modules/strova-assert",
     "lint": "eslint src",
     "prepublish": "touch example/* && npm run build",
-    "example01": "touch example/* && npm run fake-install && BABEL_ENV=default node -r babel-register example/example01.js",
+    "example01": "touch example/* && npm run fake-install && node -r babel-register example/example01.js",
     "example02": "touch example/* && npm --resetCache run fake-install && BABEL_ENV=default node -r babel-register example/example02.js",
     "example02:throw": "touch ./example/* && npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
-    "test": "touch example/* && npm run fake-install && BABEL_ENV=default mocha  'src' --compilers js:babel-register --recursive",
+    "test": "touch example/* && npm run fake-install && BABEL_ENV=default mocha 'src' --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
     "test:console": "npm run fake-install && BABEL_ENV=default mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
     "test:throw": "touch example/* && npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
@@ -29,19 +29,20 @@
   "files": [
     "lib"
   ],
-  "dependencies": {
-    "babel-preset-stage-0": "^6.22.0"
-  },
   "devDependencies": {
     "babel-cli": "^6.4.0",
     "babel-core": "^6.14.0",
     "babel-eslint": "^7.1.1",
     "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.4.3",
     "chai": "^3.5.0",
     "eslint": "^3.4.0",
     "mocha": "^3.2.0",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0"
+  },
+  "dependencies": {
+    "strova-validation": "^1.1.0"
   }
 }

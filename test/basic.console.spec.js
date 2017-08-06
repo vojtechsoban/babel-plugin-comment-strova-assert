@@ -4,28 +4,30 @@ import {add} from '../example/foomodule';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
-describe('Tesing calc method "add"', function () {
+describe('Tesing calc method "add"', () => {
 
-  beforeEach(function () {
-    this.sinon = sinon.sandbox.create();
-    this.sinon.stub(console, 'error');
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox= sinon.sandbox.create();
+    sandbox.stub(console, 'error');
   });
 
-  afterEach(function () {
-    this.sinon.restore();
+  afterEach(() => {
+    sandbox.restore();
   });
 
   it('should calculate 1 + 2', () => {
     expect(add(1, 2)).to.be.equal(3);
   });
 
-  it('should log error for both arguments', function () {
+  it('should log error for both arguments', () => {
     add();
     expect(console.error).to.have.been.calledWith('Assertion error: arg1');
     expect(console.error).to.have.been.calledWith('Assertion error: arg2');
   });
 
-  it('should log error for the 2nd argument', function () {
+  it('should log error for the 2nd argument', () => {
     add(1);
     expect(console.error).to.have.been.calledWith('Assertion error: arg2');
   });

@@ -30,14 +30,14 @@ export const sum = (arg1, arg2) => {
  * and the middle argument may not be present but when present it must not be empty
  * @param {!string} givenName
  * @param {?string} middleName
- * @param {?string} surnamme
+ * @param {?string} surname
  * @returns {string}
  */
-export const buildFullName = (givenName, middleName, surnamme) => {
+export const buildFullName = (givenName, middleName, surname) => {
   // assert givenName {$string} : Given name is missing
   // assert middleName {?string} : Middle name is missing
   // assert surname {$string} : Surname name is missing
-  return givenName + (middleName ? middleName : '') + (surnamme ? surnamme : '');
+  return givenName + (middleName ? middleName : '') + (surname ? surname : '');
 };
 
 export const greeting = (name, surname) => {

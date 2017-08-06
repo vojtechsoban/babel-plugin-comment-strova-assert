@@ -1,29 +1,28 @@
 import {transformJsToAst, serialize} from './utils';
-import * as t from './types';
+import {KEYWORD_NOT_NULL} from './types';
 import {parse} from './parser';
-export * from './assert';
+export * from './assert'; // re-export so that it could be used in generated code
 
 const assertRegex = /^\s*assert\s+(.*)$/;
 const defaultErrorMessage = 'Assertion error';
-const defaultAction = t.KEYWORD_NOT_NULL;
 
-const generate = (action, actionArguments, type, nullable = false) => {
-  
-  if (!action) {
-    action = defaultAction;
+const generateAssertionCommand = (assertionAction, actionArguments, type, nullable = false) => {
+
+  if (!assertionAction) {
+    assertionAction = KEYWORD_NOT_NULL;
   }
-  
+
   if (!actionArguments) {
     actionArguments = [];
   }
-  
-  return `(arg) => sa.assert(arg, '${action}', [${actionArguments.map(serialize)}], null, ${nullable})`;
+
+  return `(arg) => sa.assert(arg, '${assertionAction}', [${actionArguments.map(serialize)}], null, ${nullable})`;
 };
 
-const buildActionFromOpts = (t, strovaAst, action = 'log_error') => {
+const buildActionFromOpts = (t, strovaAst, actionTaken = 'log_error') => {
 
   const message = t.stringLiteral(`${strovaAst.message ? strovaAst.message : defaultErrorMessage}: ${strovaAst.expression}`);
-  
+
   const consoleEntry = (action, message) => (
     t.callExpression(
       t.memberExpression(
@@ -33,21 +32,21 @@ const buildActionFromOpts = (t, strovaAst, action = 'log_error') => {
       [message]
     )
   );
-  
-  if (action === 'throw') {
+
+  if (actionTaken === 'throw') {
     return t.throwStatement(
       t.newExpression(
         t.identifier('Error'),
         [message]
       )
     );
-  } else if (action === 'log_error') {
+  } else if (actionTaken === 'log_error') {
     return consoleEntry('error', message);
-  } else if (action === 'log_warn' || action === 'log_warning') {
+  } else if (actionTaken === 'log_warn' || actionTaken === 'log_warning') {
     return consoleEntry('warn', message);
-  } else if (action === 'log_info') {
+  } else if (actionTaken === 'log_info') {
     return consoleEntry('info', message);
-  } else if (action === 'log_debug') {
+  } else if (actionTaken === 'log_debug') {
     return consoleEntry('debug', message);
   } else {
     return consoleEntry('error', message);
@@ -55,13 +54,13 @@ const buildActionFromOpts = (t, strovaAst, action = 'log_error') => {
 };
 
 export default function visitor({types: t, template, transform}) {
-  
+
   const assertTemplate = template('if (!TEST(EXPRESSION)) ACTION');
-  
+
   return {
     visitor: {
       ['ExpressionStatement|VariableDeclaration|ReturnStatement'](path, state) {
-        
+
         const leadingComments = path.node.leadingComments;
         if (leadingComments && leadingComments.length) {
           for (let i = 0; i < leadingComments.length; i++) {
@@ -72,7 +71,7 @@ export default function visitor({types: t, template, transform}) {
               const parsedAssertion = parse(assertMatch[1]);
               const transformedExpression = transformJsToAst(transform, parsedAssertion.expression);
               const transformedTest = transformJsToAst(transform,
-                generate(parsedAssertion.action, parsedAssertion.actionArguments, parsedAssertion.type, parsedAssertion.nullable));
+                generateAssertionCommand(parsedAssertion.action, parsedAssertion.actionArguments, parsedAssertion.type, parsedAssertion.nullable));
               path.insertBefore(
                 assertTemplate({
                   EXPRESSION: transformedExpression,
@@ -84,7 +83,7 @@ export default function visitor({types: t, template, transform}) {
         }
       },
 
-      Program (path) {
+      Program(path) {
         const transformed = transform('import * as sa from \'strova-assert\';');
         const transformedNode = transformed.ast.program.body[0];
         path.unshiftContainer('body', transformedNode);

@@ -148,5 +148,3 @@ export const parse = (input) => {
     expression, action, actionArguments, nullable, type, message
   }
 };
-
-export default parse;

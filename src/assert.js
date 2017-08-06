@@ -7,14 +7,14 @@ export const notBlank = (arg) => (typeof arg === 'string' && arg.trim().length >
 export const notEmpty = (arg) => (!!arg);
 
 export const assert = (arg, action, actionArguments, type, nullable = false) => {
-  
+
   if (!action) {
-    action = defaultAction;
+   action = t.KEYWORD_NOT_NULL;
   }
   
- const nullableDecorator = (arg, ccc) => {
+ const nullableDecorator = (arg, assertFn) => {
    const isNotNull = notNull(arg);
-   return (isNotNull || nullable) && (!isNotNull || ccc(arg));
+   return (isNotNull || nullable) && (!isNotNull || assertFn(arg));
  };
   
   switch (action) {
