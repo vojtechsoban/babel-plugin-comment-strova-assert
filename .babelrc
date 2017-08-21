@@ -6,13 +6,13 @@
   "env": {
     "default": {
       "plugins": [
-        "strova-assert"
+        "babel-plugin-comment-strova-assert"
       ]
     },
     "info": {
       "plugins": [
         [
-          "strova-assert",
+          "babel-plugin-comment-strova-assert",
           {
             "action": "log_info"
           }
@@ -22,7 +22,7 @@
     "throw": {
       "plugins": [
         [
-          "strova-assert",
+          "babel-plugin-comment-strova-assert",
           {
             "action": "throw"
           }

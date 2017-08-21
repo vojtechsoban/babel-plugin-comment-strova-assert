@@ -42,7 +42,7 @@ export const buildFullName = (givenName, middleName, surname) => {
 
 export const greeting = (name, surname) => {
   // assert name notEmpty {string} : Name should not be empty, at least a space character.
-  // assert name notBlank {string} : Surname should not be blank, give me some non-white character
+  // assert surname notBlank {string} : Surname should not be blank, give me some non-white character.
   return `Hello ${name} ${surname}`;
 };
 

@@ -1,6 +1,14 @@
 import {add, greeting, buildFullName} from './foomodule';
 
+const strovaAssert = require('strova-assert').default;
+
 const expected = process.env.BABEL_ENV === 'throw';
+if (expected) {
+  strovaAssert.setAction(strovaAssert.actions.throwError);
+} else {
+  strovaAssert.setAction(strovaAssert.actions.logError);
+}
+
 const valid = false;
 
 const wrapper = (func, expected = true) => {
@@ -16,7 +24,8 @@ const wrapper = (func, expected = true) => {
       console.error('Unpected error: ' + e);
     }
   } finally {
-    console.log(`expected=${expected}, caught=${caught}, result: ${result}`);
+    console.log(`expected=${expected}, caught=${caught}, result: ${result} - ${expected === caught ? 'OK' : 'NOK'}`);
+    console.log('--------------')
   }
 };
 
