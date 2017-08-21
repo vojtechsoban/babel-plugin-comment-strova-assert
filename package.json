@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "BABEL_ENV=dev babel src --ignore '**/__test__' -d lib/.",
-    "fake-install": "babel src --ignore '**/__test__' -d node_modules/strova-assert",
+    "fake-install": "babel src --ignore '**/__test__' -d node_modules/babel-plugin-comment-strova-assert",
     "lint": "eslint src",
     "prepublish": "touch example/* && npm run build",
     "example01": "touch example/* && npm run fake-install && node -r babel-register example/example01.js",
@@ -43,6 +43,7 @@
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
+    "strova-assert": "^1.0.1",
     "strova-validation": "^1.1.0"
   }
 }
