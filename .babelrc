@@ -19,6 +19,16 @@
         ]
       ]
     },
+    "error": {
+      "plugins": [
+        [
+          "babel-plugin-comment-strova-assert",
+          {
+            "action": "log_error"
+          }
+        ]
+      ]
+    },
     "throw": {
       "plugins": [
         [

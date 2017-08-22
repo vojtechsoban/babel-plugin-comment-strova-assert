@@ -48,7 +48,7 @@ export const generateAssertionCommand = ({expression, action, actionArguments, n
     actionArguments = [];
   }
 
-  const actionStr = actionTaken ? `, action: strovaAssert.${mapPluginActionToAsserAction(actionTaken)}` : '';
+  const actionStr = actionTaken ? `, action: strovaAssert.actions.${mapPluginActionToAsserAction(actionTaken)}` : '';
 
   switch (action) {
     case types.KEYWORD_NOT_NULL:

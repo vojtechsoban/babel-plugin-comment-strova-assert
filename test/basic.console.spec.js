@@ -2,9 +2,6 @@ import chai, {assert, expect, should} from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
-// this works: import {setAction, actions} from 'strova-assert';
-// this fails: import strovaAssert from 'strova-assert';
-const strovaAssert = require('strova-assert').default;
 import {add} from '../example/foomodule';
 
 describe('Tesing calc method "add"', () => {
@@ -14,7 +11,6 @@ describe('Tesing calc method "add"', () => {
   beforeEach(() => {
     sandbox= sinon.sandbox.create();
     sandbox.stub(console, 'error');
-    strovaAssert.setAction(strovaAssert.actions.logError);
   });
 
   afterEach(() => {

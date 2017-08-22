@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-comment-strova-assert",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Replace commented expressions with assert statements",
   "main": "lib/index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "example02:throw": "touch ./example/* && npm run fake-install && BABEL_ENV=throw node -r babel-register example/example02.js",
     "test": "touch example/* && npm run fake-install && BABEL_ENV=default mocha 'src/**/*.spec.js' --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
-    "test:console": "npm run fake-install && BABEL_ENV=default mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
+    "test:console": "npm run fake-install && BABEL_ENV=error mocha '**/*.console.spec.js' --compilers js:babel-register --recursive",
     "test:throw": "touch example/* && npm run fake-install && BABEL_ENV=throw mocha '**/*.throw.spec.js' --compilers js:babel-register --recursive -name '*.throw.spec.js'"
   },
   "author": {
