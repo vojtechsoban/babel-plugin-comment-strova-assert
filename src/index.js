@@ -31,7 +31,7 @@ export default function visitor({types: t, template, transform}) {
       },
 
       Program(path) {
-        const transformed = transform('import * as strovaAssert from \'strova-assert\';');
+        const transformed = transform('import strovaAssert from \'strova-assert\';');
         const transformedNode = transformed.ast.program.body[0];
         path.unshiftContainer('body', transformedNode);
       }

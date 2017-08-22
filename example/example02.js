@@ -1,6 +1,5 @@
 import {add, greeting, buildFullName} from './foomodule';
-
-const strovaAssert = require('strova-assert').default;
+import strovaAssert from 'strova-assert';
 
 const expected = process.env.BABEL_ENV === 'throw';
 if (expected) {
